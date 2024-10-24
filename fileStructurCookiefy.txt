@@ -1,0 +1,94 @@
+.
+├── LICENSE
+├── PRIVACY_POLICY.md
+├── README.md
+├── crowdin.yml
+├── package-lock.json
+├── package.json
+└── src
+    ├── LICENSE
+    ├── _locales
+    │   ├── bg
+    │   │   └── messages.json
+    │   ├── cs
+    │   │   └── messages.json
+    │   ├── da
+    │   │   └── messages.json
+    │   ├── de
+    │   │   └── messages.json
+    │   ├── en
+    │   │   └── messages.json
+    │   ├── es
+    │   │   └── messages.json
+    │   ├── fr
+    │   │   └── messages.json
+    │   ├── hr
+    │   │   └── messages.json
+    │   ├── hu
+    │   │   └── messages.json
+    │   ├── it
+    │   │   └── messages.json
+    │   ├── ja
+    │   │   └── messages.json
+    │   ├── ko
+    │   │   └── messages.json
+    │   ├── lt
+    │   │   └── messages.json
+    │   ├── nb
+    │   │   └── messages.json
+    │   ├── nl
+    │   │   └── messages.json
+    │   ├── nn
+    │   │   └── messages.json
+    │   ├── no
+    │   │   └── messages.json
+    │   ├── pl
+    │   │   └── messages.json
+    │   ├── pt
+    │   │   └── messages.json
+    │   ├── ro
+    │   │   └── messages.json
+    │   ├── ru
+    │   │   └── messages.json
+    │   ├── sk
+    │   │   └── messages.json
+    │   ├── sv
+    │   │   └── messages.json
+    │   ├── tr
+    │   │   └── messages.json
+    │   ├── uk
+    │   │   └── messages.json
+    │   └── zh_CN
+    │       └── messages.json
+    ├── data
+    │   ├── background.html
+    │   ├── background.js
+    │   ├── css
+    │   │   └── common.css
+    │   ├── hotreload.js
+    │   ├── js
+    │   │   ├── 0_defaultClickHandler.js
+    │   │   ├── 2_sessionStorageHandler.js
+    │   │   ├── 3_localStorageHandler.js
+    │   │   ├── 5_clickHandler.js
+    │   │   ├── 6_cookieHandler.js
+    │   │   ├── 8_googleHandler.js
+    │   │   └── embedsHandler.js
+    │   ├── menu
+    │   │   ├── index.html
+    │   │   ├── script.js
+    │   │   ├── spinner.svg
+    │   │   └── style.css
+    │   ├── options.html
+    │   ├── options.js
+    │   └── rules.js
+    ├── icons
+    │   ├── 128.png
+    │   ├── 16.png
+    │   ├── 32.png
+    │   └── 48.png
+    ├── manifest_v2.json
+    ├── manifest_v3.json
+    └── rules.json
+
+34 directories, 58 files
