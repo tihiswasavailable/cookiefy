@@ -142,5 +142,9 @@
   "modalIssueDescription": {
     "message": "Vælg denne indstilling for at tilkendegive et problem på denne side relateret til en modal - som f. eks. 'Der er en pop op-boks blokering hændelse'.",
     "description": "Explanation of what a modal issue is"
+  },
+  "pause": {
+    "message": "Deaktiver",
+    "description": "Pause toggle text"
   }
 }

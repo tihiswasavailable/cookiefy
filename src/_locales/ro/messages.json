@@ -142,5 +142,9 @@
   "modalIssueDescription": {
     "message": "Selectează aceasta opțiune pentru a raporta o problemă funcțională pe aceasta pagina - ex: \"un pop-up blochează interacțiunea\".",
     "description": "Explanation of what a modal issue is"
+  },
+  "pause": {
+    "message": "Dezactivare",
+    "description": "Pause toggle text"
   }
 }
