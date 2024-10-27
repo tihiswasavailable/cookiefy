@@ -1,68 +1,113 @@
+/* Base styles */
 body {
-  -moz-user-select: none;
-  user-select: none;
-  font: 14px/18px Arial, Helvetica, sans-serif;
-  background: #e8e8e8;
-  padding: 0;
   margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  width: 280px;
+  background: white;
 }
 
-a[id] {
-  display: block;
-  cursor: pointer;
-  text-decoration: none;
+.popup-container {
+  padding: 16px;
+}
+
+/* Header section */
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+/* Logo container */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-container img {
+  width: 24px;
+  height: 24px;
+}
+
+.logo-container h1 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
   color: #000;
-  padding: 4px;
-  border-top: 1px dashed #888;
-}
-a[id]:hover {
-  background-color: #ccc;
-}
-#toggle,
-#report {
-  display: none;
-}
-#refresh {
-  display: none;
-  text-align: center;
-  font-size: 200%;
-  padding: 10px;
-  font-weight: bold;
-  color: #cc4223;
 }
 
-.menu {
-  text-align: left;
-  padding: 10px 0;
-  word-wrap: break-word;
+/* Settings button */
+#options {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.menu-hidden {
-  display: none !important;
+#options img {
+  width: 30px;
+  height: 30px;
+  opacity: 0.7;
 }
 
-h3 {
-  margin-top: 0px;
+#options:hover img {
+  opacity: 1;
 }
 
-#report_issue_type,
-label[id*="issue_description"] {
-  margin-bottom: 5px;
+/* Pause container */
+.pause-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-label[id*="issue_description"] {
-  color: rgb(43, 43, 43);
-  font-style: italic;
-  display: none;
+.pause-container span {
+  color: #000;
+  font-size: 14px;
 }
 
-label#general_issue_description {
-  display: block;
+/* Toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
 }
 
-#report-notes {
-  height: 70px;
-  min-width: 100%;
-  max-width: 100%;
-  margin-bottom: 5px;
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #dadce0;
+  transition: .2s;
+  border-radius: 20px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+input:checked + .slider {
+  background-color: #1a73e8;
+}
+
+input:checked + .slider:before {
+  transform: translateX(16px);
 }
