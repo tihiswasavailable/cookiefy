@@ -142,5 +142,9 @@
   "modalIssueDescription": {
     "message": "Select this option to signify an issue on this page related to a modal - like 'there is a pop-up box blocking interaction'.",
     "description": "Explanation of what a modal issue is"
+  },
+  "pause": {
+    "message": "Kikapcsolás",
+    "description": "Pause toggle text"
   }
 }

@@ -86,5 +86,9 @@
   "optionsSaved": {
     "message": "オプションを保存しました。",
     "description": "Message after saving options."
+  },
+  "pause": {
+    "message": "無効化",
+    "description": "Pause toggle text"
   }
 }

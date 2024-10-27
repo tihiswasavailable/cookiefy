@@ -142,5 +142,9 @@
   "modalIssueDescription": {
     "message": "Seleccione esta opção para indicar um problema nesta página relacionado com um modal - como \"há uma caixa pop-up a bloquear a interação\".",
     "description": "Explanation of what a modal issue is"
+  },
+  "pause": {
+    "message": "Desativar",
+    "description": "Pause toggle text"
   }
 }
