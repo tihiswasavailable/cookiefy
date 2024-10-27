@@ -7,7 +7,10 @@
   "scripts": {
     "lint": "eslint src .",
     "lintfix": "eslint src --fix",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "clean": "rm -rf dist cookiefy.zip",
+    "dev": "mkdir -p dist && cp -r src/_locales src/data src/icons src/manifest_v3.json src/rules.json dist/ && find dist -name '.DS_Store' -type f -delete",
+    "build": "npm run clean && npm run dev && cd dist && zip -r ../cookiefy.zip *"
   },
   "repository": {
     "type": "git",
