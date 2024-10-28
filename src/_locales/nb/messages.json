@@ -87,8 +87,12 @@
     "message": "Innstillingene ble vellykket lagret.",
     "description": "Message after saving options."
   },
-  "pause": {
+  "disable": {
     "message": "Deaktiver",
     "description": "Pause toggle text"
+  },
+  "enable": {
+    "message": "Aktiver",
+    "description": "Enable toggle text"
   }
 }

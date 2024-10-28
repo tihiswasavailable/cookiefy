@@ -143,8 +143,12 @@
     "message": "Selectează aceasta opțiune pentru a raporta o problemă funcțională pe aceasta pagina - ex: \"un pop-up blochează interacțiunea\".",
     "description": "Explanation of what a modal issue is"
   },
-  "pause": {
+  "disable": {
     "message": "Dezactivare",
     "description": "Pause toggle text"
+  },
+  "enable": {
+    "message": "Activare",
+    "description": "Enable toggle text"
   }
 }

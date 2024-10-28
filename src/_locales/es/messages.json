@@ -143,8 +143,12 @@
     "message": "Seleccione esta opción para indicar un problema en esta página relacionado con un modal, como 'hay un cuadro emergente que bloquea la interacción'.",
     "description": "Explanation of what a modal issue is"
   },
-  "pause": {
-    "message": "Desactivar",
+  "disable": {
+    "message": "Deshabilitar",
     "description": "Pause toggle text"
+  },
+  "enable": {
+    "message": "Habilitar",
+    "description": "Enable toggle text"
   }
 }

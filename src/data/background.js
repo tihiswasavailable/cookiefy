@@ -561,15 +561,22 @@ chrome.runtime.onMessage.addListener((request, info, sendResponse) => {
     if (typeof request == "object") {
       if (request.tabId && tabList[request.tabId]) {
         if (request.command == "get_active_tab") {
-          const response = { tab: tabList[request.tabId] };
+          const response = {tab: tabList[request.tabId]};
 
           if (response.tab.whitelisted) {
             response.tab.hostname = getWhitelistedDomain(
-              tabList[request.tabId]
+                tabList[request.tabId]
             );
           }
           sendResponse(response);
           responseSend = true;
+        } else if (request.command == "toggle_pause") {
+          const isEnabled = request.enabled;
+          if (isEnabled) {
+            console.log("Paused");
+          } else {
+            console.log("Running");
+          }
         } else if (request.command == "toggle_extension") {
           toggleWhitelist(tabList[request.tabId]);
         } else if (request.command == "report_website") {
