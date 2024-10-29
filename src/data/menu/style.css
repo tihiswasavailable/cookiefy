@@ -24,7 +24,7 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .logo-container {
@@ -55,15 +55,35 @@ h1 {
   filter: brightness(0) invert(1);
 }
 
-.content h2 {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0 0 10px;
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;  /* Consistent spacing between all elements */
 }
 
-.content p {
-  font-size: 14px;
-  margin: 0 0 20px;
+/* EU Compliance Label */
+.eu-compliance {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -10px;
+}
+
+.shield-icon {
+  width: 80px;
+  height: 80px;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+/* Status Section */
+.status-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px;
 }
 
 .toggle-button {
@@ -86,6 +106,7 @@ h1 {
   transform: scale(0.95); /* Slightly shrink button when clicked */
 }
 
+/* Status Section */
 .status-section {
   display: flex;
   justify-content: space-between;
@@ -93,7 +114,6 @@ h1 {
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   padding: 10px;
-  margin: 20px 0;
 }
 
 .status-label {
