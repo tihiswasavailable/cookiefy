@@ -143,8 +143,12 @@
     "message": "Wählen Sie diese Option, um ein Problem auf dieser Seite im Zusammenhang mit einem Modal zu kennzeichnen - wie \"es gibt eine Pop-Up-Box, die die Interaktion blockiert\".",
     "description": "Explanation of what a modal issue is"
   },
-  "pause": {
+  "disable": {
     "message": "Deaktivieren",
     "description": "Pause toggle text"
+  },
+  "enable": {
+    "message": "Aktivieren",
+    "description": "Enable toggle text"
   }
 }

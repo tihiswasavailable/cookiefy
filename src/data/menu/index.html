@@ -9,21 +9,38 @@
 <div class="popup-container">
     <div class="popup-header">
         <div class="logo-container">
-            <img src="../../icons/32.png" alt="Cookiefy">
+            <img src="../../icons/32.png" alt="Cookiefy" class="logo">
             <h1>Cookiefy</h1>
         </div>
-        <button id="options" title="Einstellungen">
+        <button id="options" title="Settings" class="settings-button">
             <img src="../../icons/settings.svg" alt="Settings">
         </button>
     </div>
 
-    <div class="pause-container">
-        <span data-translate="pause">Deaktivieren</span>
-        <label class="switch">
-            <input type="checkbox" id="pauseToggle">
-            <span class="slider"></span>
-        </label>
+    <div class="content">
+        <!-- h2>Manage your cookies effortlessly</h2> -->
+
+        <!--EU Badge -->
+        <div class="eu-compliance">
+            <img src="../../icons/GDPR-icon.svg" alt="GDPR" class="shield-icon">
+        </div>
+
+        <!-- Status Section -->
+        <div class="status-section">
+            <div class="status-label" data-translate="statusLabel">STATUS</div>
+            <div class="status-loading">Loading...</div>
+        </div>
+
+        <!-- Button for managing cookies -->
+        <button id="pause" class="toggle-button" data-translate="pause">Disable</button>
+
+    </div>
+
+    <div class="footer">
+        <a href="https://github.com/OhMyGuus/I-Still-Dont-Care-About-Cookies/issues" target="_blank">Create issue ticket
+            on GitHub</a>
     </div>
 </div>
+<script src="script.js"></script>
 </body>
 </html>

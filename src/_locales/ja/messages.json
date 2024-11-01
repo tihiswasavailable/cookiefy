@@ -87,8 +87,12 @@
     "message": "オプションを保存しました。",
     "description": "Message after saving options."
   },
-  "pause": {
+  "disable": {
     "message": "無効化",
     "description": "Pause toggle text"
+  },
+  "enable": {
+    "message": "有効化",
+    "description": "Enable toggle text"
   }
 }

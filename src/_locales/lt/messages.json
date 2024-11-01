@@ -87,8 +87,12 @@
     "message": "Nustatymai sėkmingai išsaugoti.",
     "description": "Message after saving options."
   },
-  "pause": {
+  "disable": {
     "message": "Išjungti",
     "description": "Pause toggle text"
+  },
+  "enable": {
+    "message": "Įjungti",
+    "description": "Enable toggle text"
   }
 }
