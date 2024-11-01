@@ -106,6 +106,13 @@ h1 {
   transform: scale(0.95); /* Slightly shrink button when clicked */
 }
 
+/* Active/Enabled state */
+.toggle-button.enabled {
+  background-color: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+}
+
 /* Status Section */
 .status-section {
   display: flex;

@@ -237,6 +237,7 @@ function blockUrlCallback(d) {
     }
   }
 
+
   if (tabList[d.tabId]?.whitelisted ?? false) {
     setDisabledBadge(d.tabId);
     return { cancel: false };
@@ -571,12 +572,23 @@ chrome.runtime.onMessage.addListener((request, info, sendResponse) => {
           sendResponse(response);
           responseSend = true;
         } else if (request.command == "toggle_pause") {
-          const isEnabled = request.enabled;
-          if (isEnabled) {
-            console.log("Paused");
+          console.log("Toggle pause received:", request);
+          const isDisabled = request.isDisabled;
+          if (isDisabled) {
+            console.log("Pausing");
+            toggleWhitelist(tabList[request.tabId]);
+            setDisabledBadge(request.tabId);
+            chrome.storage.sync.set({ disabled: true });
           } else {
-            console.log("Running");
+            console.log("Enabling");
+            toggleWhitelist(tabList[request.tabId]);
+            setSuccessBadge(request.tabId);
           }
+          chrome.storage.sync.set({ disabled: isDisabled }, () => {
+            console.log("Saved disabled state:", isDisabled);
+          });
+          sendResponse({ success: true });
+          responseSend = true;
         } else if (request.command == "toggle_extension") {
           toggleWhitelist(tabList[request.tabId]);
         } else if (request.command == "report_website") {

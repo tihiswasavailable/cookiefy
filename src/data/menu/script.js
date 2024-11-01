@@ -15,20 +15,32 @@ options.addEventListener("click", function (e) {
 });
 
 pauseButton.addEventListener("click", function (e) {
+    console.log("Toggling pause button from:", isPaused, "to:", !isPaused)
     isPaused = !isPaused;
-    updatePauseButtonLable()
+    console.log("Pause button state: ", isPaused);
+    updatePauseButtonState()
 
     chrome.runtime.sendMessage({
             command: "toggle_pause",
             tabId: currentTab.id,
-            enabled: !isPaused
-        }, () => reloadMenu());
+            isDisabled: isPaused
+        }, () => {
+        console.log("Extension state updated to:", isPaused ? "Disabled" : "Enabled")
+        reloadMenu()
+    });
 });
 
-function updatePauseButtonLable() {
-    pauseButton.textContent = isPaused ? chrome.i18n.getMessage("Enable") : chrome.i18n.getMessage("Disable");
+function updatePauseButtonState() {
+    const buttonText = isPaused ? "enable" : "disable";
+    pauseButton.textContent = chrome.i18n.getMessage(buttonText.toLowerCase());
+    pauseButton.classList.toggle("enabled", !isPaused);
 }
 
+chrome.storage.sync.get("disabled", function (data) {
+    isPaused = data.disabled ?? false;
+    console.log("Loaded initial state:", isPaused ? "Disabled" : "Enabled");
+    updatePauseButtonState();
+})
 // Initialize menu
 function reloadMenu() {
     chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
@@ -43,8 +55,9 @@ function reloadMenu() {
 
                 // Update pause state based on current tab
                 if (currentTab) {
-                    isPaused = !currentTab.whitelisted;
-                    updatePauseButtonLable();
+                    isPaused = currentTab.whitelisted;
+                    console.log("Current tab is whitelisted ", currentTab.whitelisted);
+                    updatePauseButtonState();
                 }
             }
         );
