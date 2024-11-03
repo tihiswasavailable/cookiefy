@@ -89,28 +89,34 @@ h1 {
 .toggle-button {
   font-size: 16px;
   font-weight: bold;
-  color: #6C63FF;
+  color: #6C63FF;  /* Violett im Default-Zustand */
   background-color: #fff;
   border: none;
   border-radius: 20px;
   padding: 10px 20px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease; /* Transition effects */
+  transition: all 0.3s ease;  /* Transition für alle Eigenschaften */
+  width: 100%;  /* Volle Breite */
 }
 
 .toggle-button:hover {
   background-color: #ddd;
+  transform: translateY(-1px);  /* Leichtes Anheben */
 }
 
 .toggle-button:active {
-  transform: scale(0.95); /* Slightly shrink button when clicked */
+  transform: scale(0.95);
 }
 
-/* Active/Enabled state */
+/* Enabled/Disabled Zustand */
 .toggle-button.enabled {
   background-color: transparent;
   color: #fff;
   border: 2px solid #fff;
+}
+
+.toggle-button.enabled:hover {
+  background-color: rgba(255, 255, 255, 0.1);  /* Leichter Hover-Effekt */
 }
 
 /* Status Section */

@@ -14,53 +14,80 @@ options.addEventListener("click", function (e) {
     );
 });
 
-pauseButton.addEventListener("click", function (e) {
-    console.log("Toggling pause button from:", isPaused, "to:", !isPaused)
-    isPaused = !isPaused;
-    console.log("Pause button state: ", isPaused);
-    updatePauseButtonState()
 
-    chrome.runtime.sendMessage({
+pauseButton.addEventListener("click", async function(e) {
+    // Toggle state
+    isPaused = !isPaused;
+    console.log("Toggling pause button from:", !isPaused, "to:", isPaused);
+
+    // Update UI first
+    updatePauseButtonState();
+
+    // Save state
+    const newState = isPaused ? "Disabled" : "Enabled";
+    console.log("Setting global state to:", newState);
+
+    try {
+        // Save to storage
+        await chrome.storage.sync.set({ globallyDisabled: isPaused });
+        console.log("Saved global state as:", newState);
+
+        // Notify background
+        await chrome.runtime.sendMessage({
             command: "toggle_pause",
-            tabId: currentTab.id,
             isDisabled: isPaused
-        }, () => {
-        console.log("Extension state updated to:", isPaused ? "Disabled" : "Enabled")
-        reloadMenu()
-    });
+        });
+
+        console.log("Extension state updated to:", newState);
+
+        // Reload menu after all operations
+        await reloadMenu();
+    } catch (error) {
+        console.error("Error updating state:", error);
+    }
+});
+
+// Lade initialen Status
+chrome.storage.sync.get("globallyDisabled", function(data) {
+    isPaused = data.globallyDisabled ?? false;
+    console.log("Loaded initial state:", isPaused ? "Disabled" : "Enabled");
+    updatePauseButtonState();
 });
 
 function updatePauseButtonState() {
+    console.log("Current isPaused state:", isPaused);
     const buttonText = isPaused ? "enable" : "disable";
-    pauseButton.textContent = chrome.i18n.getMessage(buttonText.toLowerCase());
-    pauseButton.classList.toggle("enabled", !isPaused);
+    pauseButton.textContent = chrome.i18n.getMessage(buttonText);
+
+    // Toggle die enabled Klasse basierend auf isPaused
+    if (isPaused) {
+        pauseButton.classList.add('enabled');  // Weißer Rahmen, transparenter Hintergrund
+    } else {
+        pauseButton.classList.remove('enabled');  // Weißer Hintergrund, violette Schrift
+    }
+
+    console.log("Updated button text to:", buttonText, "and class:", isPaused ? "enabled" : "default");
 }
 
-chrome.storage.sync.get("disabled", function (data) {
-    isPaused = data.disabled ?? false;
-    console.log("Loaded initial state:", isPaused ? "Disabled" : "Enabled");
-    updatePauseButtonState();
-})
 // Initialize menu
 function reloadMenu() {
-    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-        chrome.runtime.sendMessage(
-            {
-                command: "get_active_tab",
-                tabId: tabs[0].id
-            },
-            function (message) {
-                message = message || {};
-                currentTab = message.tab ? message.tab : false;
+    return new Promise((resolve) => {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.runtime.sendMessage(
+                {
+                    command: "get_active_tab",
+                    tabId: tabs[0].id
+                },
+                function(message) {
+                    message = message || {};
+                    currentTab = message.tab ? message.tab : false;
 
-                // Update pause state based on current tab
-                if (currentTab) {
-                    isPaused = currentTab.whitelisted;
-                    console.log("Current tab is whitelisted ", currentTab.whitelisted);
-                    updatePauseButtonState();
+                    // Don't update isPaused from tab state
+                    console.log("Current tab whitelisted:", currentTab?.whitelisted);
+                    resolve();
                 }
-            }
-        );
+            );
+        });
     });
 }
 
