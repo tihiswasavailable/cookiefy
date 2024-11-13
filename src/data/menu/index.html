@@ -25,10 +25,20 @@
             <img src="../../icons/GDPR-icon.svg" alt="GDPR" class="shield-icon">
         </div>
 
-        <!-- Status Section -->
-        <div class="status-section">
-            <div class="status-label" data-translate="statusLabel">STATUS</div>
-            <div class="status-loading">Loading...</div>
+        <!-- Cookie Section -->
+        <div class="cookie-info-section">
+            <div class="cookie-info-label">Cookie Handling</div>
+            <div class="status-section">
+                <div class="status-label">Status</div>
+                <div class="cookie-value" id="cookieStatusDisplay">-</div>
+            </div>
+        </div>
+
+        <div class="debug-section" style="display: none;">
+            <div class="status-section">
+                <div class="status-label">DEBUG INFO</div>
+                <div id="debugInfo"></div>
+            </div>
         </div>
 
         <!-- Button for managing cookies -->

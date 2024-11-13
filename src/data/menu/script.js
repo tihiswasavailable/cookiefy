@@ -42,9 +42,12 @@ pauseButton.addEventListener("click", async function(e) {
 
         // Reload menu after all operations
         await reloadMenu();
+        updatePauseButtonState();
     } catch (error) {
         console.error("Error updating state:", error);
     }
+    console.log("Extension state updated, checking cookies");
+    debugCookieStatus();
 });
 
 // Lade initialen Status
@@ -69,6 +72,40 @@ function updatePauseButtonState() {
     console.log("Updated button text to:", buttonText, "and class:", isPaused ? "enabled" : "default");
 }
 
+
+// Update cookie status display
+function updateCookieStatusDisplay() {
+    // Add the cookie status display element if it doesn't exist
+    let cookieStatusSection = document.querySelector('.cookie-info-section');
+    if (!cookieStatusSection) {
+        cookieStatusSection = document.createElement('div');
+        cookieStatusSection.className = 'cookie-info-section';
+        cookieStatusSection.innerHTML = `
+            <div class="status-section">
+                <div class="status-label">COOKIES</div>
+                <div class="status-value" id="cookieStatusDisplay"></div>
+            </div>
+        `;
+        // Insert before the toggle button
+        pauseButton.parentElement.insertBefore(cookieStatusSection, pauseButton);
+    }
+
+    const cookieStatusDisplay = document.getElementById('cookieStatusDisplay');
+
+    // Get current status based on isPaused
+    chrome.storage.sync.get("globallyDisabled", function(data) {
+        if (data.globallyDisabled) {
+            cookieStatusDisplay.textContent = "All cookies allowed";
+        } else {
+            if (currentTab && currentTab.whitelisted) {
+                cookieStatusDisplay.textContent = "Site whitelisted";
+            } else {
+                cookieStatusDisplay.textContent = "Cookies blocked";
+            }
+        }
+    });
+}
+
 // Initialize menu
 function reloadMenu() {
     return new Promise((resolve) => {
@@ -81,7 +118,7 @@ function reloadMenu() {
                 function(message) {
                     message = message || {};
                     currentTab = message.tab ? message.tab : false;
-
+                    updateCookieStatusDisplay();
                     // Don't update isPaused from tab state
                     console.log("Current tab whitelisted:", currentTab?.whitelisted);
                     resolve();
@@ -98,8 +135,54 @@ function translate() {
     });
 }
 
+
+// Debug function
+function debugCookieStatus() {
+    chrome.cookies.getAll({}, function(cookies) {
+        console.log('Current cookies:', cookies);
+
+        // Group cookies by type/status
+        let cookieStatus = {
+            blocked: [],
+            allowed: [],
+            technical: []
+        };
+
+        cookies.forEach(cookie => {
+            // Check against your blocking rules
+            if (shouldBlockCookie(cookie)) {
+                cookieStatus.blocked.push(cookie.name);
+            } else if (isTechnicalCookie(cookie)) {
+                cookieStatus.technical.push(cookie.name);
+            } else {
+                cookieStatus.allowed.push(cookie.name);
+            }
+        });
+
+        console.log('Cookie Status:', cookieStatus);
+    });
+}
+
+// Helper function
+function shouldBlockCookie(cookie) {
+    // Check against your blockUrls rules
+    return blockUrls.common.some(rule =>
+        cookie.domain.includes(rule.r) ||
+        cookie.name.includes(rule.r)
+    );
+}
+
+function isTechnicalCookie(cookie) {
+    // Define technical cookie patterns (session, csrf, etc)
+    const technicalPatterns = ['session', 'csrf', 'token', 'auth'];
+    return technicalPatterns.some(pattern =>
+        cookie.name.toLowerCase().includes(pattern)
+    );
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     translate();
     reloadMenu();
+    updatePauseButtonState();
 });
