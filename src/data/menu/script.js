@@ -15,7 +15,7 @@ options.addEventListener("click", function (e) {
 });
 
 
-pauseButton.addEventListener("click", async function(e) {
+pauseButton.addEventListener("click", async function (e) {
     // Toggle state
     isPaused = !isPaused;
     console.log("Toggling pause button from:", !isPaused, "to:", isPaused);
@@ -29,7 +29,7 @@ pauseButton.addEventListener("click", async function(e) {
 
     try {
         // Save to storage
-        await chrome.storage.sync.set({ globallyDisabled: isPaused });
+        await chrome.storage.sync.set({globallyDisabled: isPaused});
         console.log("Saved global state as:", newState);
 
         // Notify background
@@ -47,11 +47,10 @@ pauseButton.addEventListener("click", async function(e) {
         console.error("Error updating state:", error);
     }
     console.log("Extension state updated, checking cookies");
-    debugCookieStatus();
 });
 
-// Lade initialen Status
-chrome.storage.sync.get("globallyDisabled", function(data) {
+// Load initialen Status
+chrome.storage.sync.get("globallyDisabled", function (data) {
     isPaused = data.globallyDisabled ?? false;
     console.log("Loaded initial state:", isPaused ? "Disabled" : "Enabled");
     updatePauseButtonState();
@@ -72,50 +71,24 @@ function updatePauseButtonState() {
     console.log("Updated button text to:", buttonText, "and class:", isPaused ? "enabled" : "default");
 }
 
-
 // Update cookie status display
-function updateCookieStatusDisplay() {
-    // Add the cookie status display element if it doesn't exist
-    let cookieStatusSection = document.querySelector('.cookie-info-section');
-    if (!cookieStatusSection) {
-        cookieStatusSection = document.createElement('div');
-        cookieStatusSection.className = 'cookie-info-section';
-        cookieStatusSection.innerHTML = `
-            <div class="status-section">
-                <div class="status-label">COOKIES</div>
-                <div class="status-value" id="cookieStatusDisplay"></div>
-            </div>
-        `;
-        // Insert before the toggle button
-        pauseButton.parentElement.insertBefore(cookieStatusSection, pauseButton);
-    }
-
-    const cookieStatusDisplay = document.getElementById('cookieStatusDisplay');
-
-    // Get current status based on isPaused
-    chrome.storage.sync.get("globallyDisabled", function(data) {
-        if (data.globallyDisabled) {
-            cookieStatusDisplay.textContent = "All cookies allowed";
-        } else {
-            if (currentTab && currentTab.whitelisted) {
-                cookieStatusDisplay.textContent = "Site whitelisted";
-            } else {
-                cookieStatusDisplay.textContent = "Cookies blocked";
-            }
-        }
-    });
+function updateCookieStatusDisplay(cookieStatus) {
+    document.getElementById('technicalCookies').textContent =
+        cookieStatus?.technical?.length || 0;
+    document.getElementById('marketingCookies').textContent =
+        cookieStatus?.marketing?.length || 0;
 }
 
 // Initialize menu
 function reloadMenu() {
     return new Promise((resolve) => {
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
             chrome.runtime.sendMessage(
                 {
                     command: "get_active_tab",
                     tabId: tabs[0].id
                 },
-                function(message) {
+                function (message) {
                     message = message || {};
                     currentTab = message.tab ? message.tab : false;
                     updateCookieStatusDisplay();
@@ -135,49 +108,20 @@ function translate() {
     });
 }
 
-
-// Debug function
-function debugCookieStatus() {
-    chrome.cookies.getAll({}, function(cookies) {
-        console.log('Current cookies:', cookies);
-
-        // Group cookies by type/status
-        let cookieStatus = {
-            blocked: [],
-            allowed: [],
-            technical: []
-        };
-
-        cookies.forEach(cookie => {
-            // Check against your blocking rules
-            if (shouldBlockCookie(cookie)) {
-                cookieStatus.blocked.push(cookie.name);
-            } else if (isTechnicalCookie(cookie)) {
-                cookieStatus.technical.push(cookie.name);
-            } else {
-                cookieStatus.allowed.push(cookie.name);
-            }
+async function analyzeCookieStatus() {
+    try {
+        // Get cookie status from background
+        const response = await chrome.runtime.sendMessage({
+            command: "get_cookie_status"
         });
 
-        console.log('Cookie Status:', cookieStatus);
-    });
-}
-
-// Helper function
-function shouldBlockCookie(cookie) {
-    // Check against your blockUrls rules
-    return blockUrls.common.some(rule =>
-        cookie.domain.includes(rule.r) ||
-        cookie.name.includes(rule.r)
-    );
-}
-
-function isTechnicalCookie(cookie) {
-    // Define technical cookie patterns (session, csrf, etc)
-    const technicalPatterns = ['session', 'csrf', 'token', 'auth'];
-    return technicalPatterns.some(pattern =>
-        cookie.name.toLowerCase().includes(pattern)
-    );
+        if (response && response.cookieStatus) {
+            await chrome.storage.local.set({ currentCookieStatus: response.cookieStatus });
+            updateCookieStatusDisplay(response.cookieStatus);
+        }
+    } catch (error) {
+        console.error('Error in analyzeCookieStatus:', error);
+    }
 }
 
 // Initialize
@@ -185,4 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
     translate();
     reloadMenu();
     updatePauseButtonState();
+    updateCookieStatusDisplay();
+    analyzeCookieStatus();
 });

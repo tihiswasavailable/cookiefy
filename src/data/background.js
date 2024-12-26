@@ -228,7 +228,7 @@ function blockUrlCallback(d) {
     // TODO: parse rules.json for this function.
 
     return new Promise((resolve) => {
-        // Prüfe globalen Status
+        // Check globale status
         chrome.storage.sync.get("globallyDisabled", function (data) {
             // Wenn global deaktiviert, erlaube alle Cookies
             if (data.globallyDisabled) {
@@ -247,7 +247,6 @@ function blockUrlCallback(d) {
                     }
                 }
             }
-
 
             if (tabList[d.tabId]?.whitelisted ?? false) {
                 setDisabledBadge(d.tabId);
@@ -569,12 +568,18 @@ function doTheMagic(tabId, frameId, anotherTry) {
             doTheMagic(tab.tabId, tab.frameId);
         }
     });
+
+    chrome.webNavigation.onCompleted.addListener(async function(details) {
+        if (details.frameId === 0) { // Only for main frame
+            analyzeCookies(details.tabId);
+        }
+    });
 }
 
 // Toolbar menu
 
 chrome.runtime.onMessage.addListener((request, info, sendResponse) => {
-    initialize().then(() => {
+    initialize().then(async () => {
         let responseSend = false;
         if (typeof request == "object") {
             if (request.tabId && tabList[request.tabId]) {
@@ -633,6 +638,10 @@ chrome.runtime.onMessage.addListener((request, info, sendResponse) => {
                             window.location.reload();
                         },
                     });
+                } else if (request.command == "get_cookie_status") {
+                    const cookieStatus = await analyzeCookies(request.tabId);
+                    sendResponse({cookieStatus: cookieStatus});
+                    responseSend = true;
                 }
             } else {
                 if (request.command == "open_options_page") {
@@ -710,6 +719,57 @@ function executeScript(injection, callback) {
 async function loadCachedRules() {
     // TODO: Load cached rules for V3 to improve speed (Requires testing to see if this actually is faster for v3)
     cachedRules = {};
+}
+
+function categorizeCookie(cookie) {
+    const categories = {
+        technical: [
+            'session', 'csrf', 'token', 'auth', 'necessary', 'consent',
+            'security', 'essential', 'gdpr', 'cart', 'checkout', 'technical',
+            'login', 'account', 'required'
+        ],
+        marketing: [
+            'analytics', '_ga', 'stats', 'ad', 'pixel', 'track',
+            'campaign', 'fbp', 'marketing', 'doubleclick', 'targeting',
+            'social', 'facebook', 'google', 'bing', '_gid', '_gcl',
+            'remarketing', 'visitor', 'personalization'
+        ]
+    };
+
+    for (const [category, patterns] of Object.entries(categories)) {
+        if (patterns.some(pattern =>
+            cookie.name.toLowerCase().includes(pattern) ||
+            cookie.domain.toLowerCase().includes(pattern)
+        )) {
+            return category;
+        }
+    }
+    return 'rejected';
+}
+
+async function analyzeCookies(tabId) {
+    const cookies = await chrome.cookies.getAll({});
+    const cookieStatus = {
+        technical: [],
+        marketing: [],
+        rejected: []
+    };
+
+    cookies.forEach(cookie => {
+        const category = categorizeCookie(cookie);
+        cookieStatus[category].push({
+            name: cookie.name,
+            domain: cookie.domain,
+            value: cookie.value
+        });
+    });
+
+    chrome.storage.local.set({
+        currentCookieStatus: cookieStatus,
+        lastAnalyzedTab: tabId
+    });
+
+    return cookieStatus;
 }
 
 async function initialize(checkInitialized, magic) {
