@@ -151,6 +151,40 @@ h1 {
   color: #fff;
 }
 
+.categories-container {
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.category-item label {
+  font-size: 14px;
+  color: #fff;
+  cursor: default;
+}
+
+.category-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #A5A6F6;
+  cursor: default;
+  margin: 0;
+}
+
+/* Custom checkbox styling to match your theme */
+.category-item input[type="checkbox"]:checked {
+  background-color: #A5A6F6;
+  border-color: #A5A6F6;
+}
+
 .hidden {
   display: none; /* Hide element */
 }

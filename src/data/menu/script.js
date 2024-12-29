@@ -61,11 +61,10 @@ function updatePauseButtonState() {
     const buttonText = isPaused ? "enable" : "disable";
     pauseButton.textContent = chrome.i18n.getMessage(buttonText);
 
-    // Toggle die enabled Klasse basierend auf isPaused
     if (isPaused) {
-        pauseButton.classList.add('enabled');  // Weißer Rahmen, transparenter Hintergrund
+        pauseButton.classList.add('enabled');
     } else {
-        pauseButton.classList.remove('enabled');  // Weißer Hintergrund, violette Schrift
+        pauseButton.classList.remove('enabled');
     }
 
     console.log("Updated button text to:", buttonText, "and class:", isPaused ? "enabled" : "default");
@@ -73,10 +72,48 @@ function updatePauseButtonState() {
 
 // Update cookie status display
 function updateCookieStatusDisplay(cookieStatus) {
-    document.getElementById('technicalCookies').textContent =
-        cookieStatus?.technical?.length || 0;
-    document.getElementById('marketingCookies').textContent =
-        cookieStatus?.marketing?.length || 0;
+    console.log('Updating cookie status display with:', cookieStatus);
+
+    if (!cookieStatus) {
+        console.log('No cookie status provided');
+        return;
+    }
+
+    // Update checkboxes
+    const technicalCheckbox = document.getElementById('technical');
+    const statisticsCheckbox = document.getElementById('statistics');
+    const marketingCheckbox = document.getElementById('marketing');
+
+    // Add debug logging for checkbox elements
+    console.log('Checkbox elements found:', {
+        technical: !!technicalCheckbox,
+        statistics: !!statisticsCheckbox,
+        marketing: !!marketingCheckbox
+    });
+
+    // Add debug logging for cookie counts
+    console.log('Cookie counts:', {
+        technical: cookieStatus.technical?.length || 0,
+        statistics: cookieStatus.statistics?.length || 0,
+        marketing: cookieStatus.marketing?.length || 0
+    });
+
+    if (technicalCheckbox) {
+        technicalCheckbox.checked = Array.isArray(cookieStatus.technical) && cookieStatus.technical.length > 0;
+    }
+    if (statisticsCheckbox) {
+        statisticsCheckbox.checked = Array.isArray(cookieStatus.statistics) && cookieStatus.statistics.length > 0;
+    }
+    if (marketingCheckbox) {
+        marketingCheckbox.checked = Array.isArray(cookieStatus.marketing) && cookieStatus.marketing.length > 0;
+    }
+
+    // Log final checkbox states
+    console.log('Final checkbox states:', {
+        technical: technicalCheckbox?.checked,
+        statistics: statisticsCheckbox?.checked,
+        marketing: marketingCheckbox?.checked
+    });
 }
 
 // Initialize menu
@@ -101,7 +138,7 @@ function reloadMenu() {
     });
 }
 
-// Translation function (we'll need this for language support later)
+// Translation function
 function translate() {
     document.querySelectorAll("[data-translate]").forEach(element => {
         element.textContent = chrome.i18n.getMessage(element.dataset.translate);
@@ -109,15 +146,35 @@ function translate() {
 }
 
 async function analyzeCookieStatus() {
+    console.log("Analyzing cookie status");
     try {
-        // Get cookie status from background
+        // Get current tab
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+        // Request cookie status with tabId
         const response = await chrome.runtime.sendMessage({
-            command: "get_cookie_status"
+            command: "get_cookie_status",
+            tabId: tab.id
         });
 
+        console.log('Received cookie status:', response);
+
+        // Add debug logging to see the exact structure
         if (response && response.cookieStatus) {
-            await chrome.storage.local.set({ currentCookieStatus: response.cookieStatus });
+            console.log('Cookie status structure:', {
+                technical: response.cookieStatus.technical,
+                statistics: response.cookieStatus.statistics,
+                marketing: response.cookieStatus.marketing
+            });
+
             updateCookieStatusDisplay(response.cookieStatus);
+        } else {
+            console.log('No cookie status received, updating display with empty status');
+            updateCookieStatusDisplay({
+                technical: [],
+                statistics: [],
+                marketing: []
+            });
         }
     } catch (error) {
         console.error('Error in analyzeCookieStatus:', error);

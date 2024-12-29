@@ -216,6 +216,18 @@ chrome.tabs.onCreated.addListener(onCreatedListener);
 chrome.tabs.onUpdated.addListener(onUpdatedListener);
 chrome.tabs.onRemoved.addListener(onRemovedListener);
 
+
+// Tracking new cookies
+chrome.cookies.onChanged.addListener((changeInfo) => {
+    if (!changeInfo.removed) {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            if (tabs[0]) {
+                analyzeCookies(tabs[0].id);
+            }
+        });
+    }
+});
+
 // chrome.runtime.onStartup.addListener(async () => await initialize(true));
 chrome.runtime.onInstalled.addListener(
     async () => await initialize(false, true)
@@ -230,7 +242,7 @@ function blockUrlCallback(d) {
     return new Promise((resolve) => {
         // Check globale status
         chrome.storage.sync.get("globallyDisabled", function (data) {
-            // Wenn global deaktiviert, erlaube alle Cookies
+            // if globally disabled allow all cookies
             if (data.globallyDisabled) {
                 console.log("Extension is disabled globally");
                 setDisabledBadge(d.tabId);
@@ -598,7 +610,7 @@ chrome.runtime.onMessage.addListener((request, info, sendResponse) => {
                     const isDisabled = request.isDisabled;
 
                     if (request.global) {
-                        // Globaler Status wurde geändert
+                        // global state change
                         if (isDisabled) {
                             console.log("Globally disabling extension");
                             // Deaktiviere für alle Tabs
@@ -607,7 +619,7 @@ chrome.runtime.onMessage.addListener((request, info, sendResponse) => {
                             });
                         } else {
                             console.log("Globally enabling extension");
-                            // Aktiviere für alle Tabs
+                            // activate for all tabs
                             Object.keys(tabList).forEach(tabId => {
                                 setSuccessBadge(parseInt(tabId));
                             });
@@ -724,52 +736,108 @@ async function loadCachedRules() {
 function categorizeCookie(cookie) {
     const categories = {
         technical: [
-            'session', 'csrf', 'token', 'auth', 'necessary', 'consent',
-            'security', 'essential', 'gdpr', 'cart', 'checkout', 'technical',
-            'login', 'account', 'required'
+            // Essential functionality
+            'session', 'csrf', 'token', 'auth', 'login', 'security',
+            'essential', 'necessary', 'required',
+            '_sess', 'gdpr', 'ccpa', 'cookie_notice',
+            'cart', 'checkout', 'language', 'currency'
+        ],
+        statistics: [
+            // Anonyme Statistiken
+            'stats', '_pk_', 'plausible', 'matomo', '_ss_',
+            'perf_', '_dc_', '_rc_', 'stat_',
+            // Performance Monitoring
+            'newrelic', 'pingdom', 'gauge'
         ],
         marketing: [
-            'analytics', '_ga', 'stats', 'ad', 'pixel', 'track',
-            'campaign', 'fbp', 'marketing', 'doubleclick', 'targeting',
-            'social', 'facebook', 'google', 'bing', '_gid', '_gcl',
-            'remarketing', 'visitor', 'personalization'
+            // Google Analytics (considered marketing under GDPR)
+            // Tracking & Werbung
+            '_ga', '_gid', '_gat', 'gtm_', 'fbp',
+            'ads', 'adsense', 'adwords', 'doubleclick',
+            'pixel', 'marketing', 'track', '_gcl_au',
+            // Social Media
+            'facebook', 'twitter', 'linkedin', 'pinterest',
+            // Marketing Tools
+            'hubspot', 'marketo', 'mailchimp', 'intercom'
         ]
     };
 
-    for (const [category, patterns] of Object.entries(categories)) {
-        if (patterns.some(pattern =>
-            cookie.name.toLowerCase().includes(pattern) ||
-            cookie.domain.toLowerCase().includes(pattern)
-        )) {
-            return category;
-        }
+    const cookieLower = cookie.name.toLowerCase();
+    const domainLower = cookie.domain.toLowerCase();
+
+    // Check technical patterns first (essential cookies)
+    if (categories.technical.some(pattern =>
+        cookieLower.includes(pattern) || domainLower.includes(pattern))) {
+        return 'technical';
     }
-    return 'rejected';
+
+    // Then check statistics patterns (analytical cookies without personal data)
+    if (categories.statistics.some(pattern =>
+        cookieLower.includes(pattern) || domainLower.includes(pattern))) {
+        return 'statistics';
+    }
+
+    // Finally check marketing patterns (including personalization and tracking)
+    if (categories.marketing.some(pattern =>
+        cookieLower.includes(pattern) || domainLower.includes(pattern))) {
+        return 'marketing';
+    }
+
+    // If no clear match, categorize as technical by default for safety
+    return 'technical';
 }
 
 async function analyzeCookies(tabId) {
-    const cookies = await chrome.cookies.getAll({});
-    const cookieStatus = {
-        technical: [],
-        marketing: [],
-        rejected: []
-    };
+    try {
+        const tab = await chrome.tabs.get(tabId);
+        if (!tab.url || !tab.url.startsWith('http')) return null;
 
-    cookies.forEach(cookie => {
-        const category = categorizeCookie(cookie);
-        cookieStatus[category].push({
-            name: cookie.name,
-            domain: cookie.domain,
-            value: cookie.value
+        const domain = new URL(tab.url).hostname;
+        const cookies = await chrome.cookies.getAll({ domain });
+        console.log("Accepted cookies", cookies);
+
+        // Initialize with empty arrays
+        const cookieStatus = {
+            technical: [],
+            statistics: [],
+            marketing: []
+        };
+
+        // Categorize cookies
+        cookies.forEach(cookie => {
+            const category = categorizeCookie(cookie);
+            if (category && cookieStatus[category]) {
+                cookieStatus[category].push({
+                    name: cookie.name,
+                    domain: cookie.domain,
+                    value: cookie.value,
+                    path: cookie.path,
+                    secure: cookie.secure,
+                    httpOnly: cookie.httpOnly,
+                    sameSite: cookie.sameSite,
+                    expirationDate: cookie.expirationDate
+                });
+            }
         });
-    });
 
-    chrome.storage.local.set({
-        currentCookieStatus: cookieStatus,
-        lastAnalyzedTab: tabId
-    });
+        console.log("Categorized cookies structure:", cookieStatus);
 
-    return cookieStatus;
+        // Store the analysis results
+        await chrome.storage.local.set({
+            currentCookieStatus: cookieStatus,
+            lastAnalyzedTab: tabId,
+            lastAnalysisTimestamp: Date.now()
+        });
+
+        return cookieStatus;
+    } catch (error) {
+        console.error('Error analyzing cookies:', error);
+        return {
+            technical: [],
+            statistics: [],
+            marketing: []
+        };
+    }
 }
 
 async function initialize(checkInitialized, magic) {
