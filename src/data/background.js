@@ -734,56 +734,58 @@ async function loadCachedRules() {
 }
 
 function categorizeCookie(cookie) {
-    const categories = {
-        technical: [
-            // Essential functionality
-            'session', 'csrf', 'token', 'auth', 'login', 'security',
-            'essential', 'necessary', 'required',
-            '_sess', 'gdpr', 'ccpa', 'cookie_notice',
-            'cart', 'checkout', 'language', 'currency'
-        ],
-        statistics: [
-            // Anonyme Statistiken
-            'stats', '_pk_', 'plausible', 'matomo', '_ss_',
-            'perf_', '_dc_', '_rc_', 'stat_',
-            // Performance Monitoring
-            'newrelic', 'pingdom', 'gauge'
-        ],
-        marketing: [
-            // Google Analytics (considered marketing under GDPR)
-            // Tracking & Werbung
-            '_ga', '_gid', '_gat', 'gtm_', 'fbp',
-            'ads', 'adsense', 'adwords', 'doubleclick',
-            'pixel', 'marketing', 'track', '_gcl_au',
-            // Social Media
-            'facebook', 'twitter', 'linkedin', 'pinterest',
-            // Marketing Tools
-            'hubspot', 'marketo', 'mailchimp', 'intercom'
-        ]
-    };
+    // Convert cookie name to lowercase for case-insensitive matching
+    const cookieName = cookie.name.toLowerCase();
 
-    const cookieLower = cookie.name.toLowerCase();
-    const domainLower = cookie.domain.toLowerCase();
+    // Technical/Essential cookies
+    const technicalPatterns = [
+        'cf_',            // Cloudflare cookies
+        'ch-prefers',     // User preferences
+        '_sid',           // Session ID
+        'session',        // Session related
+        'csrf',           // Security
+        'anthropic',      // Site functionality
+        'intercom',       // Chat functionality
+        'lastactive',     // User session state
+        'activity'        // User activity tracking for functionality
+    ];
 
-    // Check technical patterns first (essential cookies)
-    if (categories.technical.some(pattern =>
-        cookieLower.includes(pattern) || domainLower.includes(pattern))) {
+    // Statistics/Analytics cookies
+    const statisticsPatterns = [
+        '_ga',            // Google Analytics
+        '_gid',          // Google Analytics
+        'plausible',     // Plausible Analytics
+        'stats',         // Generic statistics
+        '_pk',           // Generic analytics
+        '_google' // Google Analytics
+    ];
+
+    // Marketing cookies
+    const marketingPatterns = [
+        '_fbp',           // Facebook Pixel
+        'ads',           // Advertising
+        'track',         // Tracking
+        'doubleclick',   // Google Ads
+        'marketing'      // Generic marketing
+    ];
+
+    // technical patterns first
+    if (technicalPatterns.some(pattern => cookieName.includes(pattern))) {
         return 'technical';
     }
 
-    // Then check statistics patterns (analytical cookies without personal data)
-    if (categories.statistics.some(pattern =>
-        cookieLower.includes(pattern) || domainLower.includes(pattern))) {
+    // check statistics patterns
+    if (statisticsPatterns.some(pattern => cookieName.includes(pattern))) {
         return 'statistics';
     }
 
-    // Finally check marketing patterns (including personalization and tracking)
-    if (categories.marketing.some(pattern =>
-        cookieLower.includes(pattern) || domainLower.includes(pattern))) {
+    // check marketing patterns
+    if (marketingPatterns.some(pattern => cookieName.includes(pattern))) {
         return 'marketing';
     }
 
-    // If no clear match, categorize as technical by default for safety
+    // If no specific pattern matches, default to technical
+    // since most cookies are essential for site functionality
     return 'technical';
 }
 

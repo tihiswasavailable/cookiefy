@@ -14,10 +14,11 @@ html, body {
 .popup-container {
   width: 300px;
   padding: 20px;
-  background: linear-gradient(135deg, #6C63FF, #A5A6F6);
+  background: linear-gradient(135deg, #4A1D96, #2D1B69);
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
   color: #fff;
   text-align: center;
+  border-radius: 0px;
 }
 
 .popup-header {
@@ -58,7 +59,7 @@ h1 {
 .content {
   display: flex;
   flex-direction: column;
-  gap: 14px;  /* Consistent spacing between all elements */
+  gap: 14px;
 }
 
 /* EU Compliance Label */
@@ -87,39 +88,97 @@ h1 {
   font-size: 16px;
   font-weight: bold;
   color: #fff;
+  margin-bottom: 8px;
 }
 
-.cookie-value {
-  font-size: 16px;
-  color: #fff;
+/* Categories Container */
+.categories-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   background-color: rgba(255, 255, 255, 0.1);
-  padding: 4px 8px;
-  border-radius: 6px;
+  border-radius: 12px;
+  padding: 16px;
 }
 
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background-color: rgba(255, 255, 255, 0.10);
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.category-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95); /* Brighter text */
+}
+
+.info-icon {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  cursor: help;
+}
+
+.status-indicator {
+  font-size: 13px;
+  padding: 6px 16px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-weight: 600;
+}
+
+.status-accepted {
+  background-color: rgba(255, 255, 255, 0.45);
+  color: #fff;
+  font-weight: 600;
+}
+
+.status-rejected {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.status-indicator.required {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Toggle Button */
 .toggle-button {
-  font-size: 16px;
-  font-weight: bold;
-  color: #6C63FF;  /* Violett im Default-Zustand */
+  font-size: 15px;
+  font-weight: 600;
+  color: #6C63FF;
   background-color: #fff;
   border: none;
-  border-radius: 20px;
-  padding: 10px 20px;
+  border-radius: 25px;
+  padding: 12px 24px;
   cursor: pointer;
-  transition: all 0.3s ease;  /* Transition für alle Eigenschaften */
-  width: 100%;  /* Volle Breite */
+  transition: all 0.2s ease;
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 8px;
 }
 
 .toggle-button:hover {
-  background-color: #ddd;
-  transform: translateY(-1px);  /* Leichtes Anheben */
+  background-color: #f8f8f8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .toggle-button:active {
-  transform: scale(0.95);
+  transform: translateY(0);
 }
 
-/* Enabled/Disabled Zustand */
 .toggle-button.enabled {
   background-color: transparent;
   color: #fff;
@@ -127,7 +186,7 @@ h1 {
 }
 
 .toggle-button.enabled:hover {
-  background-color: rgba(255, 255, 255, 0.1);  /* Leichter Hover-Effekt */
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Status Section */
@@ -151,55 +210,43 @@ h1 {
   color: #fff;
 }
 
-.categories-container {
-  display: flex;
-  justify-content: space-between;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  padding: 10px;
-}
-
-.category-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.category-item label {
-  font-size: 14px;
-  color: #fff;
-  cursor: default;
-}
-
-.category-item input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: #A5A6F6;
-  cursor: default;
-  margin: 0;
-}
-
-/* Custom checkbox styling to match your theme */
-.category-item input[type="checkbox"]:checked {
-  background-color: #A5A6F6;
-  border-color: #A5A6F6;
-}
-
-.hidden {
-  display: none; /* Hide element */
-}
-
+/* Footer */
 .footer {
   margin-top: 20px;
-  font-size: 12px;
-  color: #d1d1e9;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .footer a {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
-  color: #fff;
+  padding: 5px 10px;
+  border-radius: 15px;
+  transition: all 0.2s;
+  display: inline-block;
 }
 
 .footer a:hover {
-  text-decoration: underline;
+  background-color: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+}
+
+/* Debug Section */
+.debug-section {
+  margin-top: 16px;
+  padding: 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+#debugInfo {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  word-break: break-all;
+}
+
+/* Hidden utility */
+.hidden {
+  display: none;
 }

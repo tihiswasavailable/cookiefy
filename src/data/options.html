@@ -1,42 +1,103 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+<!-- Hero Section -->
+<div class="hero">
+  <div class="container">
+    <h1>Support & Documentation</h1>
+    <p>Need help with something? Check out our most frequently asked questions.</p>
+  </div>
+</div>
 
-    <style>
-      body {
-        padding: 20px;
-      }
-      label {
-        display: block;
-        width: 800px;
-        padding: 0 0 20px;
-      }
-      textarea {
-        width: 100%;
-        height: 150px;
-      }
-    </style>
-  </head>
-  <body>
-    <h1 id="title"></h1>
+<!-- Quick Links Cards -->
+<div class="container">
+  <div class="card-grid">
+    <div class="card">
+      <h3>Getting Started</h3>
+      <p>Learn the basics and set up your first whitelist.</p>
+    </div>
+    <div class="card">
+      <h3>Configuration Guide</h3>
+      <p>Detailed instructions for advanced configuration.</p>
+    </div>
+    <div class="card">
+      <h3>Troubleshooting</h3>
+      <p>Common issues and their solutions.</p>
+    </div>
+    <div class="card">
+      <h3>Best Practices</h3>
+      <p>Tips and tricks for optimal usage.</p>
+    </div>
+  </div>
 
-    <label>
-      <span id="whitelist_label"></span><br />
-      <textarea id="whitelist"></textarea>
-    </label>
+  <!-- Whitelist Section -->
+  <div class="settings-section">
+    <h2 class="section-title">Whitelist Configuration</h2>
+    <div class="settings-content">
+      <div class="whitelist-input">
+        <label for="whitelist">
+          <span id="whitelist_label">Domain Whitelist</span>
+          <textarea id="whitelist"></textarea>
+        </label>
+      </div>
+      <div class="settings-controls">
+        <label class="checkbox-label">
+          <input type="checkbox" id="status_indicators" />
+          <span id="status_indicators_label">Enable Status Indicators</span>
+        </label>
+        <div class="save-container">
+          <input type="button" id="save" value="Save" style="min-width: 120px; color: #ffffff" />
+          <div id="status_saved"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <label>
-      <input type="checkbox" id="status_indicators" />
-      <span id="status_indicators_label"></span>
-    </label>
+  <!-- FAQ Section -->
+  <div class="faq-section">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <div class="faq-item">
+      <h3>How do I add domains to the whitelist?</h3>
+      <p>Enter one domain per line in the whitelist textarea. You can use wildcards (*) to match multiple subdomains.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What are status indicators?</h3>
+      <p>Status indicators show the current state of the extension for each website in your browser toolbar.</p>
+    </div>
+    <div class="faq-item">
+      <h3>How do I report a bug?</h3>
+      <p>You can report issues through our GitHub repository or contact support directly.</p>
+    </div>
+  </div>
 
-    <input type="button" id="save" value="" style="min-width: 100px" />
-    <div
-      id="status_saved"
-      style="display: none; color: green; padding-left: 5px"
-    ></div>
+  <!-- Support Section -->
+  <div class="support-section">
+    <h2 class="section-title">Get Help</h2>
 
-    <script src="options.js"></script>
-  </body>
+    <div class="support-card">
+      <h3>Report an Issue</h3>
+      <p>Found a bug or have a problem? Let us know and we'll help you resolve it.</p>
+      <a href="#" class="support-link">Submit Issue →</a>
+    </div>
+
+    <div class="support-card">
+      <h3>Community Support</h3>
+      <p>Join our community forum to connect with other users and share experiences.</p>
+      <a href="#" class="support-link">Visit Forum →</a>
+    </div>
+
+    <div class="support-card">
+      <h3>Documentation</h3>
+      <p>Access our comprehensive documentation for detailed guides and examples.</p>
+      <a href="#" class="support-link">View Docs →</a>
+    </div>
+  </div>
+</div>
+
+<script src="options.js"></script>
+</body>
 </html>

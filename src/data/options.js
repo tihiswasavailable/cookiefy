@@ -44,6 +44,11 @@ function restoreOptions() {
   );
 }
 
+console.log("whitelist_label exists:", document.getElementById("whitelist_label"));
+console.log("status_indicators_label exists:", document.getElementById("status_indicators_label"));
+console.log("save button exists:", document.getElementById("save"));
+console.log("status_saved exists:", document.getElementById("status_saved"));
+
 document.title = document.getElementById("title").textContent =
   chrome.i18n.getMessage("optionsTitle") +
   " - " +

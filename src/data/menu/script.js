@@ -71,48 +71,58 @@ function updatePauseButtonState() {
 }
 
 // Update cookie status display
-function updateCookieStatusDisplay(cookieStatus) {
+async function updateCookieStatusDisplay(cookieStatus) {
     console.log('Updating cookie status display with:', cookieStatus);
-
     if (!cookieStatus) {
         console.log('No cookie status provided');
         return;
     }
 
-    // Update checkboxes
-    const technicalCheckbox = document.getElementById('technical');
-    const statisticsCheckbox = document.getElementById('statistics');
-    const marketingCheckbox = document.getElementById('marketing');
+    // Get status display elements for each category
+    const technicalStatus = document.querySelector('[data-category="technical"] .status-indicator');
+    const statisticsStatus = document.querySelector('[data-category="statistics"] .status-indicator');
+    const marketingStatus = document.querySelector('[data-category="marketing"] .status-indicator');
 
-    // Add debug logging for checkbox elements
-    console.log('Checkbox elements found:', {
-        technical: !!technicalCheckbox,
-        statistics: !!statisticsCheckbox,
-        marketing: !!marketingCheckbox
-    });
+    // Get array lengths, ensuring we handle both array and number inputs
+    const getCookieCount = (category) => {
+        if (Array.isArray(category)) return category.length;
+        if (typeof category === 'number') return category;
+        return 0;
+    };
 
-    // Add debug logging for cookie counts
+    const technicalCount = getCookieCount(cookieStatus.technical);
+    const statisticsCount = getCookieCount(cookieStatus.statistics);
+    const marketingCount = getCookieCount(cookieStatus.marketing);
+
     console.log('Cookie counts:', {
-        technical: cookieStatus.technical?.length || 0,
-        statistics: cookieStatus.statistics?.length || 0,
-        marketing: cookieStatus.marketing?.length || 0
+        technical: technicalCount,
+        statistics: statisticsCount,
+        marketing: marketingCount
     });
 
-    if (technicalCheckbox) {
-        technicalCheckbox.checked = Array.isArray(cookieStatus.technical) && cookieStatus.technical.length > 0;
-    }
-    if (statisticsCheckbox) {
-        statisticsCheckbox.checked = Array.isArray(cookieStatus.statistics) && cookieStatus.statistics.length > 0;
-    }
-    if (marketingCheckbox) {
-        marketingCheckbox.checked = Array.isArray(cookieStatus.marketing) && cookieStatus.marketing.length > 0;
+    // Update status displays for all categories including technical
+    if (technicalStatus) {
+        technicalStatus.textContent = technicalCount > 0 ? 'Accepted' : 'Rejected';
+        technicalStatus.className = 'status-indicator ' + (technicalCount > 0 ? 'status-accepted' : 'status-rejected');
+        console.log('Technical status updated:', technicalCount > 0 ? 'Accepted' : 'Rejected');
     }
 
-    // Log final checkbox states
-    console.log('Final checkbox states:', {
-        technical: technicalCheckbox?.checked,
-        statistics: statisticsCheckbox?.checked,
-        marketing: marketingCheckbox?.checked
+    if (statisticsStatus) {
+        statisticsStatus.textContent = statisticsCount > 0 ? 'Accepted' : 'Rejected';
+        statisticsStatus.className = 'status-indicator ' + (statisticsCount > 0 ? 'status-accepted' : 'status-rejected');
+        console.log('Statistics status updated:', statisticsCount > 0 ? 'Accepted' : 'Rejected');
+    }
+
+    if (marketingStatus) {
+        marketingStatus.textContent = marketingCount > 0 ? 'Accepted' : 'Rejected';
+        marketingStatus.className = 'status-indicator ' + (marketingCount > 0 ? 'status-accepted' : 'status-rejected');
+        console.log('Marketing status updated:', marketingCount > 0 ? 'Accepted' : 'Rejected');
+    }
+
+    console.log('Final status states:', {
+        technical: technicalCount > 0 ? 'Accepted' : 'Rejected',
+        statistics: statisticsCount > 0 ? 'Accepted' : 'Rejected',
+        marketing: marketingCount > 0 ? 'Accepted' : 'Rejected'
     });
 }
 
@@ -128,8 +138,11 @@ function reloadMenu() {
                 function (message) {
                     message = message || {};
                     currentTab = message.tab ? message.tab : false;
-                    updateCookieStatusDisplay();
-                    // Don't update isPaused from tab state
+                    updateCookieStatusDisplay({
+                        technical: [],
+                        statistics: [],
+                        marketing: []
+                    });
                     console.log("Current tab whitelisted:", currentTab?.whitelisted);
                     resolve();
                 }
@@ -151,26 +164,29 @@ async function analyzeCookieStatus() {
         // Get current tab
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
+        if (!tab) {
+            console.warn('No active tab found');
+            return;
+        }
+
         // Request cookie status with tabId
-        const response = await chrome.runtime.sendMessage({
-            command: "get_cookie_status",
-            tabId: tab.id
+        const response = await new Promise((resolve) => {
+            chrome.runtime.sendMessage({
+                command: "get_cookie_status",
+                tabId: tab.id
+            }, (response) => {
+                resolve(response);
+            });
         });
 
-        console.log('Received cookie status:', response);
+        console.log('Received response:', response);
 
-        // Add debug logging to see the exact structure
         if (response && response.cookieStatus) {
-            console.log('Cookie status structure:', {
-                technical: response.cookieStatus.technical,
-                statistics: response.cookieStatus.statistics,
-                marketing: response.cookieStatus.marketing
-            });
-
-            updateCookieStatusDisplay(response.cookieStatus);
+            console.log('Processing cookie status:', response.cookieStatus);
+            await updateCookieStatusDisplay(response.cookieStatus);
         } else {
-            console.log('No cookie status received, updating display with empty status');
-            updateCookieStatusDisplay({
+            console.log('No cookie status in response');
+            await updateCookieStatusDisplay({
                 technical: [],
                 statistics: [],
                 marketing: []
@@ -187,5 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
     reloadMenu();
     updatePauseButtonState();
     updateCookieStatusDisplay();
+    console.log('Popup loaded, analyzing cookies')
     analyzeCookieStatus();
 });

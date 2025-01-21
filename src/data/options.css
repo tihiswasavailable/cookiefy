@@ -1,0 +1,223 @@
+/* Base styles */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Hero section */
+.hero {
+    background: linear-gradient(135deg, #4A1D96, #2D1B69);
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.hero h1 {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.hero p {
+    font-size: 1.8rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+/* Card Grid */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 2rem 0;
+    margin-bottom: 3rem;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.card h3 {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #4A1D96;
+}
+
+.card p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #666;
+}
+
+/* Settings Section */
+.settings-section {
+    padding: 3rem 0;
+}
+
+.section-title {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    color: #4A1D96;
+}
+
+#whitelist_label {
+    display: block;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #4A1D96;
+}
+
+textarea#whitelist {
+    width: 100%;
+    min-height: 200px;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    background: white;
+    color: #333;
+    resize: vertical;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+textarea#whitelist:focus {
+    outline: none;
+    border-color: #4A1D96;
+    box-shadow: 0 0 0 3px rgba(74, 29, 150, 0.1);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    margin-bottom: 1.5rem;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-right: 0.75rem;
+    width: 20px;
+    height: 20px;
+}
+
+/* Save Button */
+input[type="button"]#save {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #4A1D96, #2D1B69);
+    border: none;
+    border-radius: 12px;
+    padding: 16px 32px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+input[type="button"]#save:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #5b21b6, #3d2a8a);
+}
+
+#status_saved {
+    display: inline-block;
+    margin-left: 1rem;
+    color: #4A1D96;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* FAQ Section */
+.faq-section {
+    padding: 3rem 0;
+}
+
+.faq-item {
+    margin-bottom: 2.5rem;
+}
+
+.faq-item h3 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4A1D96;
+    margin-bottom: 1rem;
+}
+
+.faq-item p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #666;
+}
+
+/* Support Section */
+.support-section {
+    padding: 3rem 0;
+}
+
+.support-card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.support-card h3 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4A1D96;
+    margin-bottom: 1rem;
+}
+
+.support-card p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+.support-link {
+    font-size: 18px;
+    color: #4A1D96;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+.support-link:hover {
+    transform: translateX(4px);
+    color: #5b21b6;
+}
