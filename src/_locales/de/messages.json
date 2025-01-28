@@ -150,5 +150,83 @@
   "enable": {
     "message": "Aktivieren",
     "description": "Enable toggle text"
+  },
+  "helpDescription": {
+    "message": "Willkommen bei Cookiefy – Ihre Datenschutzlösung! Akzeptieren Sie nur die notwendigen Cookies und behalten Sie die Kontrolle über Ihre Online-Daten. Hier finden Sie Hilfe und Dokumentation."
+  },
+  "gettingStartedTitle": {
+    "message": "Erste Schritte"
+  },
+  "gettingStartedDesc": {
+    "message": "So richten Sie Cookiefy ein und konfigurieren Ihre ersten Einstellungen."
+  },
+  "configGuideTitle": {
+    "message": "Konfigurationsanleitung"
+  },
+  "configGuideDesc": {
+    "message": "Detaillierte Anleitungen zur Anpassung Ihrer Cookie-Optionen."
+  },
+  "troubleshootingTitle": {
+    "message": "Problemlösung"
+  },
+  "troubleshootingDesc": {
+    "message": "Beheben Sie häufig auftretende Probleme mit praktischen Lösungen."
+  },
+  "bestPracticesTitle": {
+    "message": "Best Practices"
+  },
+  "bestPracticesDesc": {
+    "message": "Lernen Sie die besten Tipps für die Einhaltung der DSGVO und optimierte Einstellungen."
+  },
+  "faqTitle": {
+    "message": "Häufig gestellte Fragen"
+  },
+  "faqDomainsTitle": {
+    "message": "Wie funktioniert Cookiefy?"
+  },
+  "faqDomainsDesc": {
+    "message": "Cookiefy erlaubt Ihnen, nur technische Cookies zu akzeptieren und alle anderen abzulehnen – in Einklang mit der DSGVO."
+  },
+  "faqIndicatorsTitle": {
+    "message": "Warum technische Cookies?"
+  },
+  "faqIndicatorsDesc": {
+    "message": "Technische Cookies sind notwendig, damit Websites korrekt funktionieren, z. B. für Sitzungen oder Warenkörbe."
+  },
+  "faqBugTitle": {
+    "message": "Wie kann ich Bugs melden?"
+  },
+  "faqBugDesc": {
+    "message": "Melden Sie Fehler direkt über unser GitHub-Repository oder senden Sie eine Nachricht an unser Support-Team."
+  },
+  "supportTitle": {
+    "message": "Hilfe erhalten"
+  },
+  "reportIssueTitle": {
+    "message": "Problem melden"
+  },
+  "reportIssueDesc": {
+    "message": "Wir kümmern uns! Beschreiben Sie das Problem, und wir finden eine Lösung."
+  },
+  "submitIssueLink": {
+    "message": "Problem melden →"
+  },
+  "communitySupportTitle": {
+    "message": "Community Support"
+  },
+  "communitySupportDesc": {
+    "message": "Treten Sie der Cookiefy-Community bei, um von anderen zu lernen oder eigene Tipps zu teilen."
+  },
+  "visitForumLink": {
+    "message": "Forum besuchen →"
+  },
+  "documentationTitle": {
+    "message": "Dokumentation"
+  },
+  "documentationDesc": {
+    "message": "Alle Antworten an einem Ort: Unsere umfassende Dokumentation ist für Sie da."
+  },
+  "viewDocsLink": {
+    "message": "Dokumentation ansehen →"
   }
 }

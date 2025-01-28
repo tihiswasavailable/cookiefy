@@ -7,7 +7,8 @@ const xmlTabs = {};
 let lastDeclarativeNetRuleId = 1;
 let settings = {statusIndicators: true, whitelistedDomains: {}};
 const isManifestV3 = chrome.runtime.getManifest().manifest_version == 3;
-
+let lastAnalysis = {};
+let cooldownTime = 2000;
 // Badges
 function setBadge(tabId, text) {
     const chromeAction = chrome?.browserAction ?? chrome?.action;
@@ -791,6 +792,11 @@ function categorizeCookie(cookie) {
 
 async function analyzeCookies(tabId) {
     try {
+        if (lastAnalysis[tabId] && Date.now() - lastAnalysis[tabId] < cooldownTime) {
+            return;
+        }
+        lastAnalysis[tabId] = Date.now();
+
         const tab = await chrome.tabs.get(tabId);
         if (!tab.url || !tab.url.startsWith('http')) return null;
 

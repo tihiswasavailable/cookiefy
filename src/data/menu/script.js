@@ -70,7 +70,6 @@ function updatePauseButtonState() {
     console.log("Updated button text to:", buttonText, "and class:", isPaused ? "enabled" : "default");
 }
 
-// Update cookie status display
 async function updateCookieStatusDisplay(cookieStatus) {
     console.log('Updating cookie status display with:', cookieStatus);
     if (!cookieStatus) {

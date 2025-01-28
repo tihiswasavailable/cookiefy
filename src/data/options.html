@@ -1,103 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
-  <link rel="stylesheet" href="options.css">
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="options.css">
 </head>
 <body>
 <!-- Hero Section -->
 <div class="hero">
-  <div class="container">
-    <h1>Support & Documentation</h1>
-    <p>Need help with something? Check out our most frequently asked questions.</p>
-  </div>
+    <div class="container">
+        <h1 id="title"></h1>
+        <p id="help_description"></p>
+    </div>
 </div>
-
 <!-- Quick Links Cards -->
 <div class="container">
-  <div class="card-grid">
-    <div class="card">
-      <h3>Getting Started</h3>
-      <p>Learn the basics and set up your first whitelist.</p>
-    </div>
-    <div class="card">
-      <h3>Configuration Guide</h3>
-      <p>Detailed instructions for advanced configuration.</p>
-    </div>
-    <div class="card">
-      <h3>Troubleshooting</h3>
-      <p>Common issues and their solutions.</p>
-    </div>
-    <div class="card">
-      <h3>Best Practices</h3>
-      <p>Tips and tricks for optimal usage.</p>
-    </div>
-  </div>
-
-  <!-- Whitelist Section -->
-  <div class="settings-section">
-    <h2 class="section-title">Whitelist Configuration</h2>
-    <div class="settings-content">
-      <div class="whitelist-input">
-        <label for="whitelist">
-          <span id="whitelist_label">Domain Whitelist</span>
-          <textarea id="whitelist"></textarea>
-        </label>
-      </div>
-      <div class="settings-controls">
-        <label class="checkbox-label">
-          <input type="checkbox" id="status_indicators" />
-          <span id="status_indicators_label">Enable Status Indicators</span>
-        </label>
-        <div class="save-container">
-          <input type="button" id="save" value="Save" style="min-width: 120px; color: #ffffff" />
-          <div id="status_saved"></div>
+    <div class="card-grid">
+        <div class="card">
+            <h3 id="getting_started_title"></h3>
+            <p id="getting_started_desc"></p>
         </div>
-      </div>
+        <div class="card">
+            <h3 id="config_guide_title"></h3>
+            <p id="config_guide_desc"></p>
+        </div>
+        <div class="card">
+            <h3 id="troubleshooting_title"></h3>
+            <p id="troubleshooting_desc"></p>
+        </div>
+        <div class="card">
+            <h3 id="best_practices_title"></h3>
+            <p id="best_practices_desc"></p>
+        </div>
     </div>
-  </div>
-
-  <!-- FAQ Section -->
-  <div class="faq-section">
-    <h2 class="section-title">Frequently Asked Questions</h2>
-    <div class="faq-item">
-      <h3>How do I add domains to the whitelist?</h3>
-      <p>Enter one domain per line in the whitelist textarea. You can use wildcards (*) to match multiple subdomains.</p>
+    <!-- Whitelist Section -->
+    <div class="settings-section">
+        <h2 class="section-title" id="whitelist_section_title"></h2>
+        <div class="settings-content">
+            <div class="whitelist-input">
+                <label>
+                    <span id="whitelist_label"></span>
+                    <textarea id="whitelist"></textarea>
+                </label>
+            </div>
+            <div class="settings-controls">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="status_indicators"/>
+                    <span id="status_indicators_label"></span>
+                </label>
+                <div class="save-container">
+                    <input type="button" id="save" value=""/>
+                    <div id="status_saved"></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="faq-item">
-      <h3>What are status indicators?</h3>
-      <p>Status indicators show the current state of the extension for each website in your browser toolbar.</p>
+    <!-- FAQ Section -->
+    <div class="faq-section">
+        <h2 class="section-title" id="faq_title"></h2>
+        <div class="faq-item">
+            <h3 id="faq_domains_title"></h3>
+            <p id="faq_domains_desc"></p>
+        </div>
+        <div class="faq-item">
+            <h3 id="faq_indicators_title"></h3>
+            <p id="faq_indicators_desc"></p>
+        </div>
+        <div class="faq-item">
+            <h3 id="faq_bug_title"></h3>
+            <p id="faq_bug_desc"></p>
+        </div>
     </div>
-    <div class="faq-item">
-      <h3>How do I report a bug?</h3>
-      <p>You can report issues through our GitHub repository or contact support directly.</p>
+    <!-- Support Section -->
+    <div class="support-section">
+        <h2 class="section-title" id="support_title"></h2>
+        <div class="support-card">
+            <h3 id="report_issue_title"></h3>
+            <p id="report_issue_desc"></p>
+            <a href="#" class="support-link" id="submit_issue_link"></a>
+        </div>
+        <div class="support-card">
+            <h3 id="community_support_title"></h3>
+            <p id="community_support_desc"></p>
+            <a href="#" class="support-link" id="visit_forum_link"></a>
+        </div>
+        <div class="support-card">
+            <h3 id="documentation_title"></h3>
+            <p id="documentation_desc"></p>
+            <a href="#" class="support-link" id="view_docs_link"></a>
+        </div>
     </div>
-  </div>
-
-  <!-- Support Section -->
-  <div class="support-section">
-    <h2 class="section-title">Get Help</h2>
-
-    <div class="support-card">
-      <h3>Report an Issue</h3>
-      <p>Found a bug or have a problem? Let us know and we'll help you resolve it.</p>
-      <a href="#" class="support-link">Submit Issue →</a>
-    </div>
-
-    <div class="support-card">
-      <h3>Community Support</h3>
-      <p>Join our community forum to connect with other users and share experiences.</p>
-      <a href="#" class="support-link">Visit Forum →</a>
-    </div>
-
-    <div class="support-card">
-      <h3>Documentation</h3>
-      <p>Access our comprehensive documentation for detailed guides and examples.</p>
-      <a href="#" class="support-link">View Docs →</a>
-    </div>
-  </div>
 </div>
-
 <script src="options.js"></script>
 </body>
 </html>
